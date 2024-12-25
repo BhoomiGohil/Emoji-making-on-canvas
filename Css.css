@@ -30,14 +30,23 @@ article {
 }
 
 aside {
-    display: grid;
-    grid-template-columns: repeat(4, 100px);
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: start;
     gap: 5px;
 }
 
-.emodiv {
+.emojiContainer {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    gap: 5px;
+}
+
+.emojiDivision {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -60,31 +69,6 @@ a {
     text-decoration: none;
 }
 
-.text-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.text {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 20px;
-}
-
-.text input {
-    width: 200px;
-    height: 50px;
-    padding: 10px;
-    border-radius: 15px;
-    font-size: 20px;
-    color: #ffbe00;
-    font-weight: bold;
-}
-
 #canvasdisplay {
     width: 450px;
     height: 450px;
@@ -93,11 +77,9 @@ a {
     align-items: center;
     border: 1px solid #FFBE00;
     overflow: hidden;
+    position: relative;
 }
 
-#message {
-    text-align: center;
-    color: #ffbe00;
-    font-weight: bold;
-    font-size: 25px;
+.emojiCanvas {
+    position: absolute;
 }
