@@ -85,7 +85,7 @@ function mouth(context, size, x, y, mouthType) {
 
 function drawTougue(context, size, x, y, type) {
   var tougueMoveLineX = size / 5,
-    touguemoveY = size / 1.7,
+    touguemoveY = size / 1.65,
     tougueLineY = size / 1.4,
     tougueY = size / 1.4,
     tougueSize = size / 5;
@@ -108,7 +108,7 @@ function drawTougue(context, size, x, y, type) {
     draw(context, "closePath");
     draw(context, "beginPath");
 
-    context.arc(x, y + tougueY, tougueSize, circleStart, 3);
+    context.arc(x, y + tougueY, tougueSize, circleStart, 3.1);
     draw(context, "stroke");
 
     draw(context, "closePath");
@@ -119,7 +119,7 @@ function drawTougue(context, size, x, y, type) {
 
     draw(context, "beginPath");
 
-    context.arc(x + sideTougueX, y + sideTougueY, tougueSize, -0.5, 2.9);
+    context.arc(x + sideTougueX, y + sideTougueY, tougueSize, -0.4, 2.9);
     draw(context, "stroke");
 
     draw(context, "closePath");
@@ -156,7 +156,13 @@ function laughTear(context, size, x, y, position) {
     draw(context, "closePath");
     draw(context, "beginPath");
 
-    context.arc(x - laughTearArcX, y + laughTearArcY, laughTearArcSize, 0.5, 4);
+    context.arc(
+      x - laughTearArcX,
+      y + laughTearArcY,
+      laughTearArcSize,
+      0.5,
+      4.1
+    );
     draw(context, "stroke");
   } else if (position === "right") {
     context.moveTo(x + laughTearMoveX, y - laughTearMoveY);
@@ -332,8 +338,11 @@ function drawEmoji(size, canvas, id, type, storeIds) {
   context.lineCap = "round";
   context.lineWidth = "3";
 
-  if (storeIds) {
+  if (storeIds === "add") {
     emojiData[type].id = id;
+    getContentIdsAndDraw(context, size, startX, startY);
+  } else if (storeIds === "remove") {
+    emojiData[type].id = null;
     getContentIdsAndDraw(context, size, startX, startY);
   } else if (emojiData[type] && emojiData[type].configs[id]) {
     emojiData[type].configs[id](context, size, startX, startY);
@@ -341,6 +350,7 @@ function drawEmoji(size, canvas, id, type, storeIds) {
 }
 
 function getContentIdsAndDraw(context, size, startX, startY) {
+  console.log(emojiData);
   Object.entries(emojiData).forEach(([type, emojiData]) => {
     if (emojiData.id !== null) {
       let id = emojiData.id;
@@ -377,7 +387,26 @@ function callFeatures(emojiList, type) {
       const mainCanvas = document.querySelector("#canvas");
       canvasDisplay.appendChild(mainCanvas);
 
-      drawEmoji(emojiSize, mainCanvas, clickedId, clickedType, true);
+      drawEmoji(emojiSize, mainCanvas, clickedId, clickedType, "add");
+    };
+
+    // Create a clickable link for removing the emoji
+    const removeLink = document.createElement("a");
+    removeLink.href = "#";
+    removeLink.setAttribute("id", rowIndex);
+    removeLink.setAttribute("type", type);
+    removeLink.textContent = "Remove";
+
+    removeLink.onclick = function (event) {
+      const clickedId = parseInt(event.target.id, 10);
+      const clickedType = event.target.type;
+
+      emojiSize = 150;
+
+      const mainCanvas = document.querySelector("#canvas");
+      canvasDisplay.appendChild(mainCanvas);
+
+      drawEmoji(emojiSize, mainCanvas, clickedId, clickedType, "remove");
     };
 
     // Create a container for the emoji and the link
@@ -386,6 +415,7 @@ function callFeatures(emojiList, type) {
 
     emojiContainer.appendChild(emojiCanvas);
     emojiContainer.appendChild(addLink);
+    emojiContainer.appendChild(removeLink);
 
     // Append the container to the appropriate section
     const containerElement = document.querySelector(`#${type}-container`);
